@@ -39,74 +39,52 @@ export default class News extends Component {
     //     }
     // }
 
-    async componentDidUpdate(prevProps) {
-        if (this.props.category !== prevProps.category) {
-        // This will run the existing code inside componentDidMount logic
-            this.setState({ page: 1, loading: true });
-            let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=da1abdb15f6e4db8a745a9cc7047104a&page=1&pageSize=${this.props.pageSize}`;
-            let data = await fetch(url);
-            let parsedData = await data.json();
-            this.setState({
-                articles: parsedData.articles || [],
-                totalResults: parsedData.totalResults || 0,
-                loading: false,
-            });
-        }
-    }
-    async updateNews(pageNo){
+    async updateNews(){
         const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=da1abdb15f6e4db8a745a9cc7047104a&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({loading:true});
         let data= await fetch(url);
         let parsedData= await data.json()
+        console.log(parsedData);
         this.setState({
-            page:this.state.page - 1,
+            totalResults:parsedData.totalResults || 0,
             articles: parsedData.articles || [],
             loading:false ,
         })
     }
     
     async componentDidMount(){
-        let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=da1abdb15f6e4db8a745a9cc7047104a&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-        this.setState({loading:true});
-        let data= await fetch(url);
-        let parsedData= await data.json()
-        console.log(parsedData);
-        this.setState({articles: parsedData.articles || [], 
-            totalResults:parsedData.totalResults || 0,
-            loading:false ,
-        })
-    }
-
-     handlePreviousClick=async()=>{
         // let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=da1abdb15f6e4db8a745a9cc7047104a&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         // this.setState({loading:true});
         // let data= await fetch(url);
         // let parsedData= await data.json()
-        // this.setState({
-        //     page:this.state.page - 1,
-        //     articles: parsedData.articles || [],
+        // console.log(parsedData);
+        // this.setState({articles: parsedData.articles || [], 
+        //     totalResults:parsedData.totalResults || 0,
         //     loading:false ,
         // })
-        this.setState({page: this.state.page -1})
+        this.updateNews()
+    }
+
+    async componentDidUpdate(prevProps, prevState) {
+        // When category changes, fetch new data
+        if (this.props.category !== prevProps.category) {
+            await this.setState({ page: 1 }); // Reset to page 1
+            this.updateNews();
+        }
+
+        // When page changes (for next/previous)
+        if (this.state.page !== prevState.page && this.props.category === prevProps.category) {
+            this.updateNews();
+        }
+    }
+
+     handlePreviousClick=async()=>{
+        this.setState({page:this.state.page - 1});
         this.updateNews();
     }
 
     handleNextClick=async()=>{
-    //     console.log("Next");
-        // if ( !(this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)))
-        // {
-        //     let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=da1abdb15f6e4db8a745a9cc7047104a&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-        //     this.setState({loading:true});
-        //     let data= await fetch(url);
-        //     let parsedData= await data.json()
-            
-        //     this.setState({
-        //         page:this.state.page + 1,
-        //         articles: parsedData.articles || [],
-        //         loading:false,
-        //     })
-        // }
-        this.setState({page: this.state.page -1})
+        this.setState({page:this.state.page +1})
         this.updateNews();
     }
 

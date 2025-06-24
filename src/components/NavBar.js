@@ -1,18 +1,38 @@
-import React, { Component } from 'react'
+import React, { Component  } from 'react'
 //import { BrowserRouter } from 'react-router-dom'
 //import PropTypes from 'prop-types'
 import {
     Link, 
+    useNavigate
 } from 'react-router-dom'
 
-export class NavBar extends Component {
-  static propTypes = {
+function withNavigation(component) {
+    return function(props){
+        const navigate = useNavigate();
+        return <NavBar {...props} navigate={navigate} />;
+    };
+}
 
-  }
-    searchedItem= document.querySelector("#searched-item")
-    searching=(searchedItem)=>{
-        this.props.searchEngine(searchedItem);
+export class NavBar extends Component {
+
+    state = {
+        searchInput: ''
     }
+
+    handleInputChange = (e) => {
+        this.setState({ searchInput: e.target.value });
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const { searchInput } = this.state;
+
+        if (searchInput.trim() !== '') {
+        this.props.searchEngine(searchInput);         // update App's searchQuery
+        this.props.navigate('/search');               // redirect to /search
+        }
+    }
+
     render() {
         return (
         <div>
@@ -35,9 +55,15 @@ export class NavBar extends Component {
                             <li className="nav-item"><Link className="nav-link" style={{ color: '#C4E1E6' }} to="/technology">Technology</Link></li>
 
                         </ul>
-                        <form className="d-flex" role="search">
-                        <input className="form-control me-2" id="searched-item" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-success" type="submit" onClick={this.searching}><Link to="/search">Search</Link></button>
+                        <form className="d-flex" role="search" onSubmit={this.handleSubmit}>
+                        <input className="form-control me-2" 
+                        id="searched-item" 
+                        type="search" 
+                        placeholder="Search" 
+                        aria-label="Search"
+                        value={this.state.searchInput}
+                        onChange={this.handleInputChange}/>
+                        <button className="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </div>
                 </div>
@@ -47,4 +73,4 @@ export class NavBar extends Component {
     }
 }
 
-export default NavBar
+export default withNavigation(NavBar);

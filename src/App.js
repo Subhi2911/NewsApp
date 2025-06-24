@@ -1,7 +1,7 @@
 import './App.css';
 
 import React, { Component } from 'react'
-import NavBar from './components/NavBar';
+import NavBarWithNavigate from './components/NavBar';
 import News from './components/News';
 import{
   BrowserRouter as Router,
@@ -11,6 +11,9 @@ import{
 import LoadingBar from "react-top-loading-bar";
 
 export default class App extends Component {
+
+  pageSize=8;
+  apiKey=process.env.REACT_APP_NEWS_API
 
   state={
     progress:0,
@@ -24,8 +27,8 @@ export default class App extends Component {
     this.setState({ currentCategory: category });
   }
 
-  handleSearch=(id)=>{
-    return id;
+  handleSearch=(query)=>{
+    this.setState({searchQuery: query});
   }
 
   categoryColors = {
@@ -38,14 +41,13 @@ export default class App extends Component {
     technology: '#C4E1E6'
 };
 
-  pageSize=6;
   render() {
     return (
       <div>
         <Router>
           
-          <NavBar searchEngine={this.handleSearch}/>
-          {/* <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/> */}
+          <NavBarWithNavigate searchEngine={this.handleSearch}/>
+          {/* <News setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/> */}
           <LoadingBar
             height='3px'
             color={this.categoryColors[this.state.currentCategory]}
@@ -53,17 +55,17 @@ export default class App extends Component {
             onLoaderFinished={() => this.setState({progress: 0,})}
           />
             <Routes>
-              <Route path="/" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='general' search={this.handleSearch}/>} /> 
-              <Route path="/general" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='general'search={this.handleSearch}/>} />
-              <Route path="/entertainment" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='entertainment'search={this.handleSearch}/>} />
-              <Route path="/business" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='business'search={this.handleSearch}/>} />
-              <Route path="/health" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='health'search={this.handleSearch}/>} />
-              <Route path="/science" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='science'search={this.handleSearch}/>} />
-              <Route path="/sports" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='sports'search={this.handleSearch}/>} />
-              <Route path="/technology" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='technology'search={this.handleSearch}/>} />
-              <Route path="/search" element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='technology' search={this.handleSearch}/>} />
-              {/* <Route path=" " element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/>} />
-              <Route path=" " element={ <News setProgress={this.setProgress} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/>} /> */}
+              <Route path="/" element={ <News key='home' setProgress={this.setProgress} apiKey={this.apiKey}  setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='general' searchQuery={this.state.searchQuery}/>} /> 
+              <Route path="/general" element={ <News key='general' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='general'searchQuery={this.state.searchQuery}/>} />
+              <Route path="/entertainment" element={ <News key='entertainment' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='entertainment'searchQuery={this.state.searchQuery}/>} />
+              <Route path="/business" element={ <News key='business' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='business' searchQuery={this.state.searchQuery}/>} />
+              <Route path="/health" element={ <News key='health' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='health' searchQuery={this.state.searchQuery}/>} />
+              <Route path="/science" element={ <News key='science' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='science' searchQuery={this.state.searchQuery}/>} />
+              <Route path="/sports" element={ <News key='sports' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='sports' searchQuery={this.state.searchQuery}/>} />
+              <Route path="/technology" element={ <News key='technology' setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='technology' searchQuery={this.state.searchQuery}/>} />
+              <Route path="/search" element={ <News key={this.state.searchQuery} setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={this.pageSize} country='us' category='technology' searchQuery={this.state.searchQuery}/>} />
+              {/* <Route path=" " element={ <News setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/>} />
+              <Route path=" " element={ <News setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/>} /> */}
             </Routes>
         </Router>
       </div>

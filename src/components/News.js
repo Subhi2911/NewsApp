@@ -8,6 +8,7 @@ import InfiniteScroll from "react-infinite-scroll-component"
 // 629c256e8600416e9087fb1b1f8a8206
 export default class News extends Component {
     api= '629c256e8600416e9087fb1b1f8a8206';
+
     static defaultProps = {
         country:'in',
         pageSize:6,
@@ -38,7 +39,7 @@ export default class News extends Component {
         document.title= `NewsDe-Lite || ${this.capitalizer(this.props.category)}`;
     }
     // buildUrl=()=>{
-    //     if (this.props.useEverything){
+    //     if (this.props.searchQuery){
     //         return `https://newsapi.org/v2/everything?q=${this.props.country}&apiKey=629c256e8600416e9087fb1b1f8a8206&page=1&pageSize=${this.props.pageSize}`;
     //     }
     //     else{
@@ -48,18 +49,30 @@ export default class News extends Component {
 
     async updateNews(props){
         this.props.setProgress(10); // Start loader
-        const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
+        let url=''
+        if (this.props.searchQuery && this.props.searchQuery.trim() !== ''){
+            url=`https://newsapi.org/v2/everything?&q=${this.props.searchQuery}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        }
+        else{
+            url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        }
+
         this.setState({loading:true});
         let data= await fetch(url);
+
         this.props.setProgress(30); // Progress update
+
         let parsedData= await data.json()
+
         this.props.setProgress(70); // Progress update
+
         console.log(parsedData);
         this.setState({
             totalResults:parsedData.totalResults || 0,
             articles: parsedData.articles || [],
             loading:false ,
-            
+            page: 1,
         })
         this.props.setProgress(100);
     }
@@ -76,9 +89,8 @@ export default class News extends Component {
             this.props.setCategory(this.props.category); // Send updated category
             this.updateNews();
         }
-
-        // When page changes (for next/previous)
-        if (this.state.page !== prevState.page && this.props.category === prevProps.category) {
+        if (this.props.searchQuery !== prevProps.searchQuery || this.props.category !== prevProps.category) {
+            await this.setState({ page: 1, articles: [] });
             this.updateNews();
         }
     }
@@ -86,22 +98,27 @@ export default class News extends Component {
     fetchMoreData=async()=>{
         let newPage=this.state.page +1 
         // this.setState({page:this.state.page +1 })
-        this.props.setProgress(10);
-        const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${newPage}&pageSize=${this.props.pageSize}`;
-        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        let url=''
+        if (this.props.searchQuery && this.props.searchQuery.trim() !== ''){
+            url=`https://newsapi.org/v2/everything?&q=${this.props.searchQuery}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        }
+        else{
+            url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        }
+
         let data= await fetch(url);
-        this.props.setProgress(30);
-        await new Promise(resolve => setTimeout(resolve, 200));
+        
         let parsedData= await data.json()
-        this.props.setProgress(70);
-        await new Promise(resolve => setTimeout(resolve, 200));
+        
         console.log(parsedData);
+
         this.setState({
             totalResults:parsedData.totalResults || 0,
             articles: this.state.articles.concat(parsedData.articles) || [],
             page: newPage,
         })
-        this.props.setProgress(100);
+        
     }
     //  handlePreviousClick=async()=>{
     //     this.setState({page:this.state.page - 1});

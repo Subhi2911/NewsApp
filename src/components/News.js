@@ -46,11 +46,14 @@ export default class News extends Component {
     //     }
     // }
 
-    async updateNews(){
+    async updateNews(props){
+        this.props.setProgress(10); // Start loader
         const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({loading:true});
         let data= await fetch(url);
+        this.props.setProgress(30); // Progress update
         let parsedData= await data.json()
+        this.props.setProgress(70); // Progress update
         console.log(parsedData);
         this.setState({
             totalResults:parsedData.totalResults || 0,
@@ -58,9 +61,11 @@ export default class News extends Component {
             loading:false ,
             
         })
+        this.props.setProgress(100);
     }
     
     async componentDidMount(){
+        this.props.setCategory(this.props.category);
         this.updateNews()
     }
 
@@ -68,6 +73,7 @@ export default class News extends Component {
         // When category changes, fetch new data
         if (this.props.category !== prevProps.category) {
             await this.setState({ page: 1 }); // Reset to page 1
+            this.props.setCategory(this.props.category); // Send updated category
             this.updateNews();
         }
 
@@ -78,18 +84,24 @@ export default class News extends Component {
     }
 
     fetchMoreData=async()=>{
-
-        this.setState({page:this.state.page +1 })
-        const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
-        
+        let newPage=this.state.page +1 
+        // this.setState({page:this.state.page +1 })
+        this.props.setProgress(10);
+        const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${newPage}&pageSize=${this.props.pageSize}`;
+        await new Promise(resolve => setTimeout(resolve, 200));
         let data= await fetch(url);
+        this.props.setProgress(30);
+        await new Promise(resolve => setTimeout(resolve, 200));
         let parsedData= await data.json()
+        this.props.setProgress(70);
+        await new Promise(resolve => setTimeout(resolve, 200));
         console.log(parsedData);
         this.setState({
             totalResults:parsedData.totalResults || 0,
             articles: this.state.articles.concat(parsedData.articles) || [],
-            
+            page: newPage,
         })
+        this.props.setProgress(100);
     }
     //  handlePreviousClick=async()=>{
     //     this.setState({page:this.state.page - 1});
@@ -105,7 +117,7 @@ export default class News extends Component {
     return (
        <>
             <h3 className='text-center' style={{marginBottom:'1rem'} }>NewsDe-Lite Top Headlines from {this.capitalizer(this.props.category)}</h3>
-            {this.state.loading && <Spinner/>}
+            {/* {this.state.loading && <Spinner/>} */}
             <InfiniteScroll
                 dataLength={this.state.articles.length}
                 next={this.fetchMoreData}
@@ -114,9 +126,9 @@ export default class News extends Component {
                 >
                     <div className="container">
                         <div className="row" >
-                            {this.state.articles.map((element)=>{
+                            {this.state.articles.map((element,index)=>{
                                 return(
-                                    <div className="col-md-3 " key={element.url} >
+                                    <div className="col-md-3 " key={element.url + index} >
                                         <NewsItem 
                                         title={element.title?element.title.slice(0,45)+"...":" "} 
                                         description={element.description?element.description.slice(0,88)+"...": " "} 

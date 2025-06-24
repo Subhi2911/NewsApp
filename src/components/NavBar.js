@@ -32,7 +32,7 @@ export class NavBar extends Component {
                             <li className="nav-item"><Link className="nav-link" style={{ color: '#FF0B55' }} to="/health">Health</Link></li>
                             <li className="nav-item"><Link className="nav-link" style={{ color: '#8B5DFF' }} to="/science">Science</Link></li>
                             <li className="nav-item"><Link className="nav-link" style={{ color: '#16C47F' }} to="/sports">Sports</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#FFEB55' }} to="/technology">Technology</Link></li>
+                            <li className="nav-item"><Link className="nav-link" style={{ color: '#C4E1E6' }} to="/technology">Technology</Link></li>
 
                         </ul>
                         <form className="d-flex" role="search">

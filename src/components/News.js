@@ -20,10 +20,12 @@ export default class News extends Component {
         country: PropTypes.string,
         pageSize: PropTypes.number,
         category: PropTypes.string,
+   
         //search: PropTypes.string,
     }
 
     capitalizer(string){
+        if(!string) return ' ';
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
@@ -35,6 +37,7 @@ export default class News extends Component {
             loading: false,
             page:1,
             totalResults: 0,
+            searchQuery: this.props.searchQuery,
         }
         document.title= `NewsDe-Lite || ${this.capitalizer(this.props.category)}`;
     }
@@ -49,13 +52,14 @@ export default class News extends Component {
 
     async updateNews(props){
         this.props.setProgress(10); // Start loader
-
+        
         let url=''
-        if (this.props.searchQuery && this.props.searchQuery.trim() !== ''){
-            url=`https://newsapi.org/v2/everything?&q=${this.props.searchQuery}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        
+        if (window.location.pathname === '/search' && this.props.searchQuery && this.props.searchQuery.trim() !== '') {
+            url = `https://newsapi.org/v2/everything?q=${this.props.searchQuery}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         }
-        else{
-            url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        else {
+            url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         }
 
         this.setState({loading:true});
@@ -75,6 +79,7 @@ export default class News extends Component {
             page: 1,
         })
         this.props.setProgress(100);
+        
     }
     
     async componentDidMount(){
@@ -100,12 +105,11 @@ export default class News extends Component {
         // this.setState({page:this.state.page +1 })
         
         let url=''
-        if (this.props.searchQuery && this.props.searchQuery.trim() !== ''){
-            url=`https://newsapi.org/v2/everything?&q=${this.props.searchQuery}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-        }
-        else{
-            url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-        }
+        if (window.location.pathname === '/search' && this.props.searchQuery && this.props.searchQuery.trim() !== '') {
+        url = `https://newsapi.org/v2/everything?q=${this.props.searchQuery}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    } else {
+        url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    }
 
         let data= await fetch(url);
         
@@ -133,7 +137,9 @@ export default class News extends Component {
   render() {
     return (
        <>
-            <h3 className='text-center' style={{marginBottom:'1rem'} }>NewsDe-Lite Top Headlines from {this.capitalizer(this.props.category)}</h3>
+            <h3 className='text-center' style={{ marginBottom: '1rem', marginTop: '5rem' }}>
+                {this.props.searchQuery && this.props.searchQuery.trim() !== ''&& window.location.pathname==='/search'? `Search Results for "${this.props.searchQuery}"`: this.props.category === 'home'? `Latest News from Around the World`: `NewsDe-Lite Top Headlines from ${this.capitalizer(this.props.category)}`}
+            </h3>
             {/* {this.state.loading && <Spinner/>} */}
             <InfiniteScroll
                 dataLength={this.state.articles.length}
@@ -157,6 +163,9 @@ export default class News extends Component {
                                     </div>
                                 )
                             })} 
+                            {this.state.articles.length === 0 && !this.state.loading && (
+                                <h4 className="text-center mt-4">No results found.</h4>
+                            )}
                         </div>
                     </div>
             </InfiniteScroll>

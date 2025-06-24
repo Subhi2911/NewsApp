@@ -16,7 +16,8 @@ function withNavigation(component) {
 export class NavBar extends Component {
 
     state = {
-        searchInput: ''
+        searchInput: '',
+        active: 'active',
     }
 
     handleInputChange = (e) => {
@@ -30,29 +31,35 @@ export class NavBar extends Component {
         if (searchInput.trim() !== '') {
         this.props.searchEngine(searchInput);         // update App's searchQuery
         this.props.navigate('/search');               // redirect to /search
+        this.setState({searchInput: ''})
         }
     }
+
+    handleClick=(name)=>{
+        this.setState({active: name,});
+    }
+
 
     render() {
         return (
         <div>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary"> 
+            <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top" > 
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">NewsDe-Lite</Link>
+                    <div className="navbar-brand" >NewsDe-Lite</div>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item"><Link className="nav-link active" aria-current="page" to="/">Home</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='home'?'active' : " "}`} aria-current="page" to="/" onClick={()=>this.handleClick('home')}>Home</Link></li>
                             
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#0065F8' }} to="/general">General</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#FFCC00' }} to="/entertainment">Entertainment</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#FF2DF1' }} to="/business">Business</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#FF0B55' }} to="/health">Health</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#8B5DFF' }} to="/science">Science</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#16C47F' }} to="/sports">Sports</Link></li>
-                            <li className="nav-item"><Link className="nav-link" style={{ color: '#C4E1E6' }} to="/technology">Technology</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='general'?'active' : " "}`} style={{ color: '#0065F8' }} onClick={()=>this.handleClick('general')} to="/general">General</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='entertainment'?'active' : " "}`} style={{ color: '#FFCC00' }} onClick={()=>this.handleClick('entertainment')} to="/entertainment">Entertainment</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='business'?'active' : " "}`} style={{ color: '#FF2DF1' }} onClick={()=>this.handleClick('business')} to="/business">Business</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='health'?'active' : " "}`} style={{ color: '#FF0B55' }} onClick={()=>this.handleClick('health')} to="/health">Health</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='science'?'active' : " "}`} style={{ color: '#8B5DFF' }} onClick={()=>this.handleClick('science')} to="/science">Science</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='sports'?'active' : " "}`} style={{ color: '#16C47F' }} onClick={()=>this.handleClick('sports')} to="/sports">Sports</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='technology'?'active' : " "}`} style={{ color: '#C4E1E6' }} onClick={()=>this.handleClick('techonology')} to="/technology">Technology</Link></li>
 
                         </ul>
                         <form className="d-flex" role="search" onSubmit={this.handleSubmit}>

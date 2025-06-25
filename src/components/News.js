@@ -39,7 +39,7 @@ export default class News extends Component {
             totalResults: 0,
             searchQuery: this.props.searchQuery,
         }
-        document.title= `NewsDe-Lite || ${this.capitalizer(this.props.category)}`;
+        document.title= `NewsDe-Lite || ${window.location.pathname==="/search"?this.props.searchQuery:this.capitalizer(this.props.category)}`;
     }
    
     async updateNews(props){
@@ -88,7 +88,7 @@ export default class News extends Component {
             await this.setState({ page: 1 }); // Reset to page 1
             this.props.setCategory(this.props.category); // Send updated category
             this.updateNews();
-            document.title= `NewsDe-Lite || ${this.capitalizer(this.props.category)}`;
+            document.title= `NewsDe-Lite || ${window.location.pathname==="/search"?'Search':this.capitalizer(this.props.category)}`;
         }
         if (this.props.searchQuery !== prevProps.searchQuery || this.props.category !== prevProps.category) {
             await this.setState({ page: 1, articles: [] });

@@ -13,7 +13,7 @@ export default class News extends Component {
         country:'in',
         pageSize:6,
         category:'general',
-        //search:'general',
+       
     }
 
     static propTypes ={
@@ -21,7 +21,7 @@ export default class News extends Component {
         pageSize: PropTypes.number,
         category: PropTypes.string,
    
-        //search: PropTypes.string,
+        
     }
 
     capitalizer(string){
@@ -31,7 +31,7 @@ export default class News extends Component {
 
     constructor(props){
         super(props);
-        //console.log(this.props.apiKey)
+        
         this.state={
             articles: [],
             loading: false,
@@ -67,7 +67,6 @@ export default class News extends Component {
 
         this.props.setProgress(70); // Progress update
 
-        console.log(parsedData);
         this.setState({
             totalResults:parsedData.totalResults || 0,
             articles: parsedData.articles || [],
@@ -98,7 +97,6 @@ export default class News extends Component {
     }
 
     fetchMoreData=async()=>{
-        // this.setState({page:this.state.page +1 })
         
         let url=''
         if (window.location.pathname === '/search' && this.props.searchQuery && this.props.searchQuery.trim() !== '' ) {
@@ -115,8 +113,6 @@ export default class News extends Component {
         let data= await fetch(url);
         
         let parsedData= await data.json()
-        
-        console.log(parsedData);
 
         this.setState({
             totalResults:parsedData.totalResults || 0,
@@ -125,15 +121,6 @@ export default class News extends Component {
         })
         
     }
-    //  handlePreviousClick=async()=>{
-    //     this.setState({page:this.state.page - 1});
-    //     this.updateNews();
-    // }
-
-    // handleNextClick=async()=>{
-    //     this.setState({page:this.state.page +1})
-    //     this.updateNews();
-    // }
 
   render() {
     return (
@@ -141,7 +128,7 @@ export default class News extends Component {
             <h3 className='text-center' style={{ marginBottom: '1rem', marginTop: '5rem' }}>
                 {this.props.searchQuery && this.props.searchQuery.trim() !== ''&& window.location.pathname==='/search'? `Search Results for "${this.props.searchQuery}"`: this.props.category === 'home'? `Latest News from Around the World`: `NewsDe-Lite Top Headlines from ${this.capitalizer(this.props.category)}`}
             </h3>
-            {/* {this.state.loading && <Spinner/>} */}
+            
             <InfiniteScroll
                 dataLength={this.state.articles.length}
                 next={this.fetchMoreData}
@@ -170,10 +157,7 @@ export default class News extends Component {
                         </div>
                     </div>
             </InfiniteScroll>
-            {/* <div className="container d-flex justify-content-between">
-                    <button disabled={this.state.page <=1 ?true:false} type="button" className="btn btn-dark " onClick={this.handlePreviousClick}> &larr; Previous</button>
-                    <button disabled={ this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)}type="button" className="btn btn-dark " onClick={this.handleNextClick}>Next &rarr;</button>
-            </div> */}
+           
         </>
     )
   }

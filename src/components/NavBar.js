@@ -43,7 +43,7 @@ export class NavBar extends Component {
     render() {
         return (
         <div>
-            <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top" > 
+            <nav className="navbar navbar-expand-lg  fixed-top" style={{backgroundColor:'#F1EFEC'}}> 
                 <div className="container-fluid">
                     <div className="navbar-brand" >NewsDe-Lite</div>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@ export class NavBar extends Component {
                             <li className="nav-item"><Link className={`nav-link ${this.state.active==='health'?'active' : " "}`} style={{ color: '#FF0B55' }} onClick={()=>this.handleClick('health')} to="/health">Health</Link></li>
                             <li className="nav-item"><Link className={`nav-link ${this.state.active==='science'?'active' : " "}`} style={{ color: '#8B5DFF' }} onClick={()=>this.handleClick('science')} to="/science">Science</Link></li>
                             <li className="nav-item"><Link className={`nav-link ${this.state.active==='sports'?'active' : " "}`} style={{ color: '#16C47F' }} onClick={()=>this.handleClick('sports')} to="/sports">Sports</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='technology'?'active' : " "}`} style={{ color: '#C4E1E6' }} onClick={()=>this.handleClick('techonology')} to="/technology">Technology</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='technology'?'active' : " "}`} style={{ color: '#093FB4' }} onClick={()=>this.handleClick('technology')} to="/technology">Technology</Link></li>
 
                         </ul>
                         <form className="d-flex" role="search" onSubmit={this.handleSubmit}>
@@ -72,6 +72,7 @@ export class NavBar extends Component {
                         onChange={this.handleInputChange}/>
                         <button className="btn btn-outline-success" type="submit">Search</button>
                         </form>
+                        
                     </div>
                 </div>
             </nav>

@@ -13,8 +13,8 @@ import LoadingBar from "react-top-loading-bar";
 export default class App extends Component {
 
   pageSize=8;
-  apiKey=process.env.REACT_APP_NEWS_API
-
+  apiKey=process.env.REACT_APP_NEWS_API ;
+ 
   state={
     progress:0,
     currentCategory: 'general',
@@ -38,14 +38,14 @@ export default class App extends Component {
     health: '#FF0B55',
     science: '#8B5DFF',
     sports: '#16C47F',
-    technology: '#C4E1E6'
+    technology: '#093FB4'
 };
 
   render() {
     return (
       <div>
         <Router>
-          
+           
           <NavBarWithNavigate searchEngine={this.handleSearch}/>
           {/* <News setProgress={this.setProgress} apiKey={this.apiKey} setCategory={this.setCategory}     pageSize={6} country='us' category='general'/> */}
           <LoadingBar

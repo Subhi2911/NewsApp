@@ -51,15 +51,15 @@ export class NavBar extends Component {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='home'?'active' : " "}`} aria-current="page" to="/" onClick={()=>this.handleClick('home')}>Home</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='home'&& window.location.pathname==='/'?'active' : " "}`} aria-current="page" to="/" onClick={()=>this.handleClick('home')}>Home</Link></li>
                             
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='general'?'active' : " "}`} style={{ color: '#0065F8' }} onClick={()=>this.handleClick('general')} to="/general">General</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='entertainment'?'active' : " "}`} style={{ color: '#FFCC00' }} onClick={()=>this.handleClick('entertainment')} to="/entertainment">Entertainment</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='business'?'active' : " "}`} style={{ color: '#FF2DF1' }} onClick={()=>this.handleClick('business')} to="/business">Business</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='health'?'active' : " "}`} style={{ color: '#FF0B55' }} onClick={()=>this.handleClick('health')} to="/health">Health</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='science'?'active' : " "}`} style={{ color: '#8B5DFF' }} onClick={()=>this.handleClick('science')} to="/science">Science</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='sports'?'active' : " "}`} style={{ color: '#16C47F' }} onClick={()=>this.handleClick('sports')} to="/sports">Sports</Link></li>
-                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='technology'?'active' : " "}`} style={{ color: '#093FB4' }} onClick={()=>this.handleClick('technology')} to="/technology">Technology</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='general'&& window.location.pathname==='/general'?'active' : " "}`} style={{ color: '#0065F8' }} onClick={()=>this.handleClick('general')} to="/general">General</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='entertainment'&& window.location.pathname==='/entertainment'?'active' : " "}`} style={{ color: '#FFCC00' }} onClick={()=>this.handleClick('entertainment')} to="/entertainment">Entertainment</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='business'&& window.location.pathname==='/business'?'active' : " "}`} style={{ color: '#FF2DF1' }} onClick={()=>this.handleClick('business')} to="/business">Business</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='health'&& window.location.pathname==='/health'?'active' : " "}`} style={{ color: '#FF0B55' }} onClick={()=>this.handleClick('health')} to="/health">Health</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='science'&& window.location.pathname==='/science'?'active' : " "}`} style={{ color: '#8B5DFF' }} onClick={()=>this.handleClick('science')} to="/science">Science</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='sports'&& window.location.pathname==='/sports'?'active' : " "}`} style={{ color: '#16C47F' }} onClick={()=>this.handleClick('sports')} to="/sports">Sports</Link></li>
+                            <li className="nav-item"><Link className={`nav-link ${this.state.active==='technology'&& window.location.pathname==='/technology'?'active' : " "}`} style={{ color: '#093FB4' }} onClick={()=>this.handleClick('technology')} to="/technology">Technology</Link></li>
 
                         </ul>
                         <form className="d-flex" role="search" onSubmit={this.handleSubmit}>

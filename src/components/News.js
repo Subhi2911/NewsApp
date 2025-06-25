@@ -98,19 +98,19 @@ export default class News extends Component {
     }
 
     fetchMoreData=async()=>{
-        let newPage=this.state.page +1 
         // this.setState({page:this.state.page +1 })
         
         let url=''
         if (window.location.pathname === '/search' && this.props.searchQuery && this.props.searchQuery.trim() !== '' ) {
-        url = `https://newsapi.org/v2/everything?q=${this.props.searchQuery}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        url = `https://newsapi.org/v2/everything?q=${this.props.searchQuery}&apiKey=${this.props.apiKey}&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
         }
         else if (this.props.category==='home' && window.location.pathname === '/'){
-        url = `https://newsapi.org/v2/everything?q=all&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        url = `https://newsapi.org/v2/everything?q=all&apiKey=${this.props.apiKey}&page=${this.state.page +1}&pageSize=${this.props.pageSize}`;
         }
         else {
-        url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+        url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page +1}&pageSize=${this.props.pageSize}`;
         }
+        this.setState({page: this.state.page +1 })
 
         let data= await fetch(url);
         
@@ -121,7 +121,7 @@ export default class News extends Component {
         this.setState({
             totalResults:parsedData.totalResults || 0,
             articles: this.state.articles.concat(parsedData.articles) || [],
-            page: newPage,
+            page: this.state.page +1,
         })
         
     }
